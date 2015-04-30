@@ -8,17 +8,20 @@ from datetime import datetime
 from bestmenu.bing_search import run_query
 from django.contrib.auth.models import User
 
+# Try to obtain UserProfile if it exists
+def get_userprofile(user):
+    current_user = user
+    try:
+        return UserProfile.objects.get(user_id=current_user.id)
+    except:
+        return None
+
 def index(request):
     category_list = Category.objects.order_by('-likes', 'name')[:5]
     restaurant_list = Restaurant.objects.order_by('-views', 'title')[:5]
     context_dict = {'categories': category_list, 'restaurants': restaurant_list}
 
-    # Try to obtain UserProfile if it exists
-    current_user = request.user
-    try:
-        context_dict['user_profile'] = UserProfile.objects.get(user_id=current_user.id)
-    except:
-        pass
+    context_dict['user_profile'] = get_userprofile(request.user)
 
     # Cookie to track index visits
     visits = request.session.get('visits')
@@ -50,6 +53,9 @@ def about(request):
     else:
         count = 0
     context_dict['visits'] = count
+    
+    context_dict['user_profile'] = get_userprofile(request.user)
+
     return render(request, 'bestmenu/about.html', context_dict)
 
 def category(request, category_name_slug):
@@ -75,6 +81,8 @@ def category(request, category_name_slug):
         unslugify = category_name_slug.replace('-', ' ')
         context_dict['category_name'] = unslugify
 
+    context_dict['user_profile'] = get_userprofile(request.user)
+
     return render(request, 'bestmenu/category.html', context_dict)
 
 @login_required
@@ -90,7 +98,10 @@ def add_category(request):
     else:
         form = CategoryForm()
 
-    return render(request, 'bestmenu/add_category.html', {'form': form})
+    context_dict = {'form': form}
+    context_dict['user_profile'] = get_userprofile(request.user)
+
+    return render(request, 'bestmenu/add_category.html', context_dict)
 
 @login_required
 def add_restaurant(request, category_name_slug):
@@ -118,6 +129,8 @@ def add_restaurant(request, category_name_slug):
     context_dict['form'] = form
     context_dict['category'] = cat
     context_dict['category_name_url'] = category_name_slug
+
+    context_dict['user_profile'] = get_userprofile(request.user)
 
     return render(request, 'bestmenu/add_restaurant.html', context_dict)
 
@@ -216,7 +229,10 @@ def search(request):
             # Run Bing function to get the results list
             result_list = run_query(query)
 
-    return render(request, 'bestmenu/search.html', {'result_list': result_list})
+    context_dict = {'result_list': result_list}
+    context_dict['user_profile'] = get_userprofile(request.user)
+
+    return render(request, 'bestmenu/search.html', context_dict)
 
 def track_url(request):
     restaurant_id = None
@@ -282,6 +298,8 @@ def profile(request):
             context_dict['user_error'] = user_form.errors
             context_dict['profile_error'] = profile_form.errors
 
+    context_dict['user_profile'] = get_userprofile(request.user)
+
     return render(request, 'bestmenu/profile.html', context_dict)
 
 @login_required
@@ -345,10 +363,14 @@ def all_categories(request):
     category_list = Category.objects.order_by('name')
     context_dict = {'categories': category_list}
 
+    context_dict['user_profile'] = get_userprofile(request.user)
+
     return render(request, 'bestmenu/all_categories.html', context_dict)
 
 def all_restaurants(request):
     restaurant_list = Restaurant.objects.order_by('title')
     context_dict = {'restaurants': restaurant_list}
+
+    context_dict['user_profile'] = get_userprofile(request.user)
 
     return render(request, 'bestmenu/all_restaurants.html', context_dict)
