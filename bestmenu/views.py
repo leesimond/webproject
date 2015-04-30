@@ -25,11 +25,9 @@ def index(request):
     if not visits:
         visits = 1
     reset_last_visit_time = False
-
     last_visit = request.session.get('last_visit')
     if last_visit:
         last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
-
         if (datetime.now() - last_visit_time).seconds > 0:
             visits = visits + 1
             reset_last_visit_time = True
@@ -56,15 +54,12 @@ def about(request):
 
 def category(request, category_name_slug):
     context_dict = {}
-
     context_dict['result_list'] = None
     context_dict['query'] = None
     if request.method == 'POST':
         query = request.POST['query']
-
         if query:
             result_list = run_query(query)
-
             context_dict['result_list'] = result_list
             context_dict['query'] = query
 
@@ -72,9 +67,7 @@ def category(request, category_name_slug):
         category = Category.objects.get(slug=category_name_slug)
         context_dict['category_name'] = category.name
         context_dict['category_name_url'] = category_name_slug
-
         restaurants = Restaurant.objects.filter(category=category).order_by('-views', 'title')
-
         context_dict['restaurants'] = restaurants
         context_dict['category'] = category
     except Category.DoesNotExist:
@@ -82,17 +75,14 @@ def category(request, category_name_slug):
         unslugify = category_name_slug.replace('-', ' ')
         context_dict['category_name'] = unslugify
 
-
     return render(request, 'bestmenu/category.html', context_dict)
 
 @login_required
 def add_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
-
         if form.is_valid():
             form.save(commit=True)
-
             return HttpResponseRedirect(reverse('bestmenu:index'))
         else:
             #print(form.errors)
@@ -136,7 +126,6 @@ def register(request):
     context_dict = {}
 
     if request.method == 'POST':
-
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
 
@@ -161,13 +150,13 @@ def register(request):
                     profile.picture = request.FILES['picture']
 
                 profile.save()
-
                 registered = True
                 
         else:
             #print(user_form.errors, profile_form.errors)
             context_dict['user_error'] = user_form.errors
             context_dict['profile_error'] = profile_form.errors
+
         if password != password2:
             context_dict['password_error'] = 'Passwords do not match.'
 
@@ -220,12 +209,9 @@ def user_logout(request):
     return HttpResponseRedirect('bestmenu:index')
 
 def search(request):
-
     result_list = []
-
     if request.method == 'POST':
         query = request.POST['query']
-
         if query:
             # Run Bing function to get the results list
             result_list = run_query(query)
@@ -267,23 +253,18 @@ def profile(request):
     try:
         up = UserProfile.objects.get(user=u)
         context_dict['userprofile'] = up
-
     except:
         pass
 
     context_dict['user'] = u
 
     if request.method == 'POST':
-
         user_form = EditUserForm(data=request.POST)
         profile_form = EditUserProfileForm(data=request.POST)
-        
         if user_form.is_valid() and profile_form.is_valid():
-
             if request.POST.get('email'):
                 u.email = request.POST.get('email')
                 u.save()
-    
             if request.POST.get('website'):
                 try:
                     if not request.POST.get('website').startswith('http://'):
@@ -296,7 +277,6 @@ def profile(request):
             if 'picture' in request.FILES:
                 up.picture = request.FILES['picture']
                 up.save()
-
         else:
             #print(user_form.errors, profile_form.errors)
             context_dict['user_error'] = user_form.errors
@@ -356,9 +336,7 @@ def auto_add_restaurant(request):
         if cat_id:
             category = Category.objects.get(id=int(cat_id))
             r = Restaurant.objects.get_or_create(category=category, title=title, url=url)
-
             restaurants = Restaurant.objects.filter(category=category).order_by('-views')
-
             context_dict['restaurants'] = restaurants
 
     return render(request, 'bestmenu/restaurant_list.html', context_dict)
