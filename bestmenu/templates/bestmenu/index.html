@@ -1,0 +1,77 @@
+{% extends 'bestmenu/base.html' %}
+
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block body_block %}
+	<div class="page-header">
+		{% if user.is_authenticated %}
+			<h1>Hello {{ user.username }}! Welcome to Best Menu</h1>
+
+		{% else %}
+			<h1>Hello! Welcome to Best Menu</h1>
+		{% endif %}
+	</div>
+	<div class="row placeholders">
+		<div class="col-xs-12 col-sm-6 placeholder">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Top 5 Categories (Likes)</h3>
+				</div>
+			</div>
+			{% if categories %}
+				<ul class="list-group">
+					{% for category in categories %}
+					<li class="list-group-item"><a href="{% url 'bestmenu:category' category.slug %}">{{ category.name }}</a> ({{ category.likes }}
+						{% if category.likes == 1 %}
+							like)
+						{% else %}
+							likes)
+						{% endif %}
+					</li>
+					{% endfor %}
+				</ul>
+			{% else %}
+				<strong>There are no categories present.</strong>
+			{% endif %}
+		</div>
+
+		<div class="col-xs-12 col-sm-6 placeholder">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Top 5 Restaurants (Views)</h3>
+				</div>
+			</div>
+
+			{% if restaurants %}
+				<ul class="list-group">
+					{% for restaurant in restaurants %}
+						<li class="list-group-item"><a href="{% url 'bestmenu:goto' %}?restaurant_id={{ restaurant.id }}">{{ restaurant.title }}</a> ({{ restaurant.views }}
+							{% if restaurant.views == 1 %}
+								view)
+							{% else %}
+								views)
+							{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+			{% else %}
+				<strong>There are no restaurants.</strong>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="column">
+		<div class="row-xs-12 row-sm-6r">
+			Best Menu is a directory of restaurants sorted by categories. Creating an account allows you to:
+			<ul>
+				<li>'Like' categories</li>
+				<li>Add categories</li>
+				<li>Add restaurants</li>
+				<li>View and edit profile</li>
+			</ul>
+			Home page visits: {{ visits }}
+		</div>
+	</div>
+{% endblock %}

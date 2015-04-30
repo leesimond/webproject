@@ -1,0 +1,18 @@
+{% extends 'bestmenu/base.html' %}
+
+{% load static %}
+{% load bestmenu_extras %}
+
+{% block title %}About{% endblock %}
+
+{% block body_block %}
+	<h1>About Best Menu</h1>
+	Best Menu is a directory of restaurants sorted by categories. Creating an account allows you to:
+	<ul>
+		<li>'Like' categories</li>
+		<li>Add categories</li>
+		<li>Add restaurants</li>
+		<li>View and edit profile</li>
+	</ul>
+	<p>Home page visits: {{ visits }}</p>
+{% endblock %}

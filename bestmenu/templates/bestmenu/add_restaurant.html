@@ -1,0 +1,35 @@
+{% extends 'bestmenu/base.html' %}
+
+{% block title %}Add Restaurant{% endblock %}
+
+{% block body_block %}
+		{% if category %}
+			<h1>{{ category }}</h1>
+	<form id="restaurant_form" method="post" action="{% url 'bestmenu:add_restaurant' category.slug %}" enctype="multipart/form-data">
+		<h2 class="form-signin-heading">Add a Restaurant to <a href="{% url 'bestmenu:category' category.slug %}">{{ category.name }}</a></h2>
+		{% if form_error %}
+		<p class="text-danger">
+			{{ form_error }}
+		</p>
+		{% endif %}
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="id_title">Restaurant Name:</label>
+			<input class="form-control" id="id_title" name="title" type="text" placeholder="Enter restaurant name" />
+		</div>
+
+		<div class="form-group">
+			<label for="id_url">Restaurant Website:</label>
+			<div class="input-group">
+				<span class="input-group-addon" id="id_addon">http://</span>
+				<input class="form-control" id="id_url" name="url" type="text" placeholder="Enter restaurant URL" />
+			</div>
+		</div>
+
+			<button class="btn btn-primary" type="submit">Add Restaurant</button>
+	</form>
+		{% else %}
+			<h1>This category does not exist.</h1>
+	</div>
+		{% endif %}
+{% endblock %}

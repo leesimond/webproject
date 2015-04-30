@@ -1,0 +1,16 @@
+{% if restaurants %}
+	<ul>
+	{% for restaurant in restaurants %}
+		<li>
+		<a href="{% url 'bestmenu:goto' %}?restaurant_id={{ restaurant.id }}">{{ restaurant.title }}</a>
+		{% if restaurant.views > 1 %}
+			({{ restaurant.views }} views)
+		{% elif restaurant.views == 1 %}
+			({{ restaurant.views }} view)
+		{% endif %}
+		</li>
+	{% endfor %}
+	</ul>
+{% else %}
+	<strong>No restaurants currently in category.</strong>
+{% endif %}

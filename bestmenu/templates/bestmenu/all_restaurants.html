@@ -1,0 +1,32 @@
+{% extends 'bestmenu/base.html' %}
+
+{% load static %}
+
+{% block title %}All Restaurants{% endblock %}
+
+{% block body_block %}
+	<div class="row placeholders">
+		<div class="col-xs-12 col-sm-6 placeholder">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">All Restaurants</h3>
+				</div>
+			</div>
+			{% if restaurants %}
+				<ul class="list-group">
+					{% for restaurant in restaurants %}
+					<li class="list-group-item"><a href="{% url 'bestmenu:goto' %}?restaurant_id={{ restaurant.id }}">{{ restaurant.title }}</a> ({{ restaurant.views }}
+							{% if restaurant.views == 1 %}
+								view)
+							{% else %}
+								views)
+							{% endif %}
+					</li>
+					{% endfor %}
+				</ul>
+					{% else %}
+						<strong>There are no restaurants present.</strong>
+					{% endif %}
+		</div>
+	</div>
+{% endblock %}
