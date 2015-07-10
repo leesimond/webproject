@@ -46,3 +46,4 @@ gunicorn.conf.py
 nginx.conf
 webproject/db_password.py
 *.pyc
+*.swp

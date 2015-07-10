@@ -7,7 +7,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class RestaurantAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'url')
 
-# Update the registeration to include customised interface
+# Update the registeration to include this customised interface
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(UserProfile)
