@@ -41,8 +41,8 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-webproject/__pycache__/settings.cpython-34.pyc
 bestmenu/bing_key.py
 gunicorn.conf.py
 nginx.conf
 webproject/db_password.py
+*.pyc
