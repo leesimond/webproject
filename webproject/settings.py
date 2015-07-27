@@ -18,7 +18,7 @@ from webproject.db_password import *
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'z2z@fx)@peg=g)lz_3&wanwe004g^xw6jg9v1hpbw+js9#!8v2'
+SECRET_KEY = secretkey 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
